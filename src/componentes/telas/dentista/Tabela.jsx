@@ -1,0 +1,57 @@
+import { useContext } from 'react';
+import DentistaContext from './DentistaContext';
+import Alerta from '../../comuns/Alerta';
+import Table from 'react-bootstrap/Table';
+import { Button } from 'react-bootstrap';
+
+function Tabela() {
+    const { alerta, listaObjetos, remover, novoObjeto, editarObjeto } = useContext(DentistaContext);
+
+    return (
+        <div style={{ padding: '20px' }}>
+            <h1>Dentistas</h1>
+            <Alerta alerta={alerta} />
+            <Button variant="primary" onClick={() => novoObjeto()}>
+                Novo <i className="bi bi-file-earmark-plus"></i>
+            </Button>
+            {listaObjetos.length === 0 && <p className="mt-3">Nenhum dentista encontrado.</p>}
+            {listaObjetos.length > 0 && (
+                <Table striped bordered hover responsive className="mt-3">
+                    <thead>
+                        <tr>
+                            <th style={{ textAlign: 'center' }}>Ações</th>
+                            <th>Código</th>
+                            <th>Nome</th>
+                            <th>Especialidade</th>
+                            <th>CRO</th>
+                            <th>Telefone</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {listaObjetos.map((objeto) => (
+                            <tr key={objeto.codigo}>
+                                <td align="center">
+                                    <Button variant="info" className="me-1"
+                                        onClick={() => editarObjeto(objeto.codigo)}>
+                                        <i className="bi bi-pencil-square"></i>
+                                    </Button>
+                                    <Button variant="danger"
+                                        onClick={() => remover(objeto.codigo)}>
+                                        <i className="bi bi-trash"></i>
+                                    </Button>
+                                </td>
+                                <td>{objeto.codigo}</td>
+                                <td>{objeto.nome}</td>
+                                <td>{objeto.especialidade}</td>
+                                <td>{objeto.cro}</td>
+                                <td>{objeto.telefone}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
+            )}
+        </div>
+    );
+}
+
+export default Tabela;
