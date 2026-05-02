@@ -39,27 +39,28 @@ function Paciente() {
         setExibirForm(true);
     };
 
-    const editarObjeto = async codigo => {
-        setObjeto(await getPacientePorCodigoAPI(codigo));
-        setEditar(true);
-        setAlerta({ status: "", message: "" });
-        setExibirForm(true);
-    };
-
-    const acaoCadastrar = async e => {
-        e.preventDefault();
-        const metodo = editar ? "PUT" : "POST";
-        try {
-            let retornoAPI = await salvarPacienteAPI(objeto, metodo);
-            setAlerta({ status: retornoAPI.status, message: retornoAPI.message });
+const editarObjeto = async codigo => {
+    const dados = await getPacientePorCodigoAPI(codigo);
+    setObjeto(dados);
+    setEditar(true);
+    setAlerta({ status: "", message: "" });
+    setExibirForm(true);
+};
+const acaoCadastrar = async e => {
+    e.preventDefault();
+    const metodo = editar ? "PUT" : "POST";
+    try {
+        let retornoAPI = await salvarPacienteAPI(objeto, metodo);
+        setAlerta({ status: retornoAPI.status, message: retornoAPI.message });
+        if (retornoAPI.objeto) {
             setObjeto(retornoAPI.objeto);
-            if (!editar) setEditar(true);
-        } catch (err) {
-            console.error(err.message);
         }
-        recuperaPacientes();
-    };
-
+        if (!editar) setEditar(true);
+    } catch (err) {
+        console.error(err.message);
+    }
+    recuperaPacientes();
+};
     const handleChange = (e) => {
         setObjeto({ ...objeto, [e.target.name]: e.target.value });
     };

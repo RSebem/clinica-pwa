@@ -44,26 +44,29 @@ function Consulta() {
         setExibirForm(true);
     };
 
-    const editarObjeto = async codigo => {
-        setObjeto(await getConsultaPorCodigoAPI(codigo));
-        setEditar(true);
-        setAlerta({ status: "", message: "" });
-        setExibirForm(true);
-    };
+const editarObjeto = async codigo => {
+    const dados = await getConsultaPorCodigoAPI(codigo);
+    setObjeto(dados);
+    setEditar(true);
+    setAlerta({ status: "", message: "" });
+    setExibirForm(true);
+};
 
-    const acaoCadastrar = async e => {
-        e.preventDefault();
-        const metodo = editar ? "PUT" : "POST";
-        try {
-            let retornoAPI = await salvarConsultaAPI(objeto, metodo);
-            setAlerta({ status: retornoAPI.status, message: retornoAPI.message });
+const acaoCadastrar = async e => {
+    e.preventDefault();
+    const metodo = editar ? "PUT" : "POST";
+    try {
+        let retornoAPI = await salvarConsultaAPI(objeto, metodo);
+        setAlerta({ status: retornoAPI.status, message: retornoAPI.message });
+        if (retornoAPI.objeto) {
             setObjeto(retornoAPI.objeto);
-            if (!editar) setEditar(true);
-        } catch (err) {
-            console.error(err.message);
         }
-        recuperaConsultas();
-    };
+        if (!editar) setEditar(true);
+    } catch (err) {
+        console.error(err.message);
+    }
+    recuperaConsultas();
+};
 
     const handleChange = (e) => {
         setObjeto({ ...objeto, [e.target.name]: e.target.value });
