@@ -7,33 +7,36 @@ import { NavLink, Outlet } from 'react-router-dom';
 function Menu() {
     return (
         <div>
-            {/* Adicionado shadow-sm e border-bottom para um visual mais moderno */}
-            <Navbar expand="lg" className="bg-white shadow-sm border-bottom">
+            <Navbar expand="lg" className="bg-body-tertiary">
                 <Container>
-                    <NavLink className="navbar-brand fw-bold text-primary" to="/">
-                        🦷 Clínica Odonto Sorriso
+                    <NavLink className="navbar-brand" aria-current="page" exact="true" to="/">
+Clínica Odonto Sorriso
                     </NavLink>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="ms-auto"> {/* ms-auto alinha os itens à direita */}
-                            <NavLink className="nav-link" to="/">Home</NavLink>
-                            
+                        <Nav className="me-auto">
+                            <NavLink className="nav-link" aria-current="page" exact="true" to="/">
+                                Home
+                            </NavLink>
                             <NavDropdown title="Manutenções" id="basic-nav-dropdown">
-                                <NavLink className="dropdown-item" to="/dentistas">Dentistas</NavLink>
-                                <NavLink className="dropdown-item" to="/pacientes">Pacientes</NavLink>
-                                <NavLink className="dropdown-item" to="/consultas">Consultas</NavLink>
+                                <NavLink className="dropdown-item" exact="true" to="/dentistas">
+                                    Dentistas
+                                </NavLink>
+                                <NavLink className="dropdown-item" exact="true" to="/pacientes">
+                                    Pacientes
+                                </NavLink>
+                                <NavLink className="dropdown-item" exact="true" to="/consultas">
+                                    Consultas
+                                </NavLink>
                             </NavDropdown>
-                            
-                            <NavLink className="nav-link" to="/sobre">Sobre</NavLink>
+                            <NavLink className="nav-link" aria-current="page" exact="true" to="/sobre">
+                                Sobre
+                            </NavLink>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-
-            {/* Container com margin-top para o conteúdo não ficar colado no menu */}
-            <Container className="mt-4">
-                <Outlet />
-            </Container>
+            <Outlet />
         </div>
     );
 }
