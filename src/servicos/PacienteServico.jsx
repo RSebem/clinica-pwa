@@ -1,20 +1,32 @@
 export const getPacientesAPI = async () => {
     const response = await fetch(`${process.env.REACT_APP_ENDERECO_API}/paciente`, {
-        method: "GET", headers: { "Content-Type": "application/json" }
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "authorization": getToken()
+        }
     });
     return await response.json();
 };
 
 export const getPacientePorCodigoAPI = async codigo => {
     const response = await fetch(`${process.env.REACT_APP_ENDERECO_API}/paciente/${codigo}`, {
-        method: "GET", headers: { "Content-Type": "application/json" }
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "authorization": getToken()
+        }
     });
     return await response.json();
 };
 
 export const deletePacientePorCodigoAPI = async codigo => {
     const response = await fetch(`${process.env.REACT_APP_ENDERECO_API}/paciente/${codigo}`, {
-        method: "DELETE", headers: { "Content-Type": "application/json" }
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "authorization": getToken()
+        }
     });
     return await response.json();
 };
@@ -25,7 +37,10 @@ export const salvarPacienteAPI = async (objeto, metodo) => {
         : `${process.env.REACT_APP_ENDERECO_API}/paciente`;
     const response = await fetch(url, {
         method: metodo,
-        headers: { "Content-Type": "application/json" },
+        headers: {
+            "Content-Type": "application/json",
+            "authorization": getToken()
+        },
         body: JSON.stringify(objeto),
     });
     return await response.json();

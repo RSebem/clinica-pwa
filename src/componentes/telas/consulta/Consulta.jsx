@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ConsultaContext from './ConsultaContext';
 import Tabela from './Tabela';
 import Formulario from './Formulario';
@@ -9,8 +10,12 @@ import {
 } from '../../../servicos/ConsultaServico';
 import { getDentistasAPI } from '../../../servicos/DentistaServico';
 import { getPacientesAPI } from '../../../servicos/PacienteServico';
+import { getUsuario } from '../../../seguranca/Autenticacao';
 
 function Consulta() {
+    const navigate = useNavigate();
+    const usuario = getUsuario();
+
     const [alerta, setAlerta] = useState({ status: "", message: "" });
     const [listaObjetos, setListaObjetos] = useState([]);
     const [carregando, setCarregando] = useState(true);
@@ -24,65 +29,76 @@ function Consulta() {
     });
 
     const recuperaConsultas = async () => {
-        setCarregando(true);
-        setListaObjetos(await getConsultasAPI());
-        setCarregando(false);
+        try {
+            setCarregando(true);
+            setListaObjetos(await getConsultasAPI());
+            setCarregando(false);
+        } catch (err) {
+            navigate("/login", { replace: true });
+        }
     };
 
     const remover = async codigo => {
         if (window.confirm('Deseja remover esta consulta?')) {
-            let retornoAPI = await deleteConsultaPorCodigoAPI(codigo);
-            setAlerta({ status: retornoAPI.status, message: retornoAPI.message });
-            recuperaConsultas();
+            try {
+                let retornoAPI = await deleteConsultaPorCodigoAPI(codigo);
+                setAlerta({ status: retornoAPI.status, message: retornoAPI.message });
+                recuperaConsultas();
+            } catch (err) {
+                navigate("/login", { replace: true });
+            }
         }
     };
 
     const novoObjeto = () => {
         setEditar(false);
         setAlerta({ status: "", message: "" });
-        setObjeto({ codigo: "", data_hora: "", status: "agendada", observacao: "", dentista: "", paciente: "" });
+        setObjeto({
+            codigo: "", data_hora: "", status: "agendada",
+            observacao: "", dentista: "", paciente: ""
+        });
         setExibirForm(true);
     };
 
-const editarObjeto = async codigo => {
-    const dados = await getConsultaPorCodigoAPI(codigo);
-    setObjeto(dados);
-    setEditar(true);
-    setAlerta({ status: "", message: "" });
-    setExibirForm(true);
-};
-
-const acaoCadastrar = async e => {
-    e.preventDefault();
-    const metodo = editar ? "PUT" : "POST";
-    try {
-        let retornoAPI = await salvarConsultaAPI(objeto, metodo);
-        setAlerta({ status: retornoAPI.status, message: retornoAPI.message });
-        if (retornoAPI.objeto) {
-            setObjeto(retornoAPI.objeto);
+    const editarObjeto = async codigo => {
+        try {
+            const dados = await getConsultaPorCodigoAPI(codigo);
+            setObjeto(dados);
+            setEditar(true);
+            setAlerta({ status: "", message: "" });
+            setExibirForm(true);
+        } catch (err) {
+            navigate("/login", { replace: true });
         }
-        if (!editar) setEditar(true);
-    } catch (err) {
-        console.error(err.message);
-    }
-    recuperaConsultas();
-};
+    };
+
+    const acaoCadastrar = async e => {
+        e.preventDefault();
+        const metodo = editar ? "PUT" : "POST";
+        try {
+            let retornoAPI = await salvarConsultaAPI(objeto, metodo);
+            setAlerta({ status: retornoAPI.status, message: retornoAPI.message });
+            if (retornoAPI.objeto) setObjeto(retornoAPI.objeto);
+            if (!editar) setEditar(true);
+        } catch (err) {
+            navigate("/login", { replace: true });
+        }
+        recuperaConsultas();
+    };
 
     const handleChange = (e) => {
         setObjeto({ ...objeto, [e.target.name]: e.target.value });
     };
 
-useEffect(() => {
-    recuperaConsultas();
-    getDentistasAPI().then(data => {
-        console.log('Dentistas recebidos:', data);
-        setListaDentistas(Array.isArray(data) ? data : []);
-    });
-    getPacientesAPI().then(data => {
-        console.log('Pacientes recebidos:', data);
-        setListaPacientes(Array.isArray(data) ? data : []);
-    });
-}, []);
+    useEffect(() => {
+        recuperaConsultas();
+        getDentistasAPI().then(data => {
+            setListaDentistas(Array.isArray(data) ? data : []);
+        }).catch(() => navigate("/login", { replace: true }));
+        getPacientesAPI().then(data => {
+            setListaPacientes(Array.isArray(data) ? data : []);
+        }).catch(() => navigate("/login", { replace: true }));
+    }, []);
 
     return (
         <ConsultaContext.Provider value={{
@@ -90,7 +106,8 @@ useEffect(() => {
             exibirForm, setExibirForm,
             novoObjeto, editarObjeto, remover,
             acaoCadastrar, handleChange,
-            listaDentistas, listaPacientes
+            listaDentistas, listaPacientes,
+            usuario
         }}>
             <Carregando carregando={carregando}>
                 <Tabela />

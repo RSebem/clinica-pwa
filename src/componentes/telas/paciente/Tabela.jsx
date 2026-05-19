@@ -5,7 +5,7 @@ import Table from 'react-bootstrap/Table';
 import { Button } from 'react-bootstrap';
 
 function Tabela() {
-    const { alerta, listaObjetos, remover, novoObjeto, editarObjeto } = useContext(PacienteContext);
+    const { alerta, listaObjetos, remover, novoObjeto, editarObjeto, usuario } = useContext(PacienteContext);
 
     return (
         <div style={{ padding: '20px' }}>
@@ -36,10 +36,12 @@ function Tabela() {
                                         onClick={() => editarObjeto(objeto.codigo)}>
                                         <i className="bi bi-pencil-square"></i>
                                     </Button>
-                                    <Button variant="danger"
-                                        onClick={() => remover(objeto.codigo)}>
-                                        <i className="bi bi-trash"></i>
-                                    </Button>
+                                    {usuario && usuario.tipo === 'A' &&
+                                        <Button variant="danger"
+                                            onClick={() => remover(objeto.codigo)}>
+                                            <i className="bi bi-trash"></i>
+                                        </Button>
+                                    }
                                 </td>
                                 <td>{objeto.codigo}</td>
                                 <td>{objeto.nome}</td>

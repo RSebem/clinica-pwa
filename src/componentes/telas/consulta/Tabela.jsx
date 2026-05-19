@@ -5,7 +5,7 @@ import Table from 'react-bootstrap/Table';
 import { Button, Badge } from 'react-bootstrap';
 
 function Tabela() {
-    const { alerta, listaObjetos, remover, novoObjeto, editarObjeto } = useContext(ConsultaContext);
+    const { alerta, listaObjetos, remover, novoObjeto, editarObjeto, usuario } = useContext(ConsultaContext);
 
     const corStatus = (status) => {
         if (status === 'agendada') return 'primary';
@@ -42,10 +42,12 @@ function Tabela() {
                                         onClick={() => editarObjeto(objeto.codigo)}>
                                         <i className="bi bi-pencil-square"></i>
                                     </Button>
-                                    <Button variant="danger"
-                                        onClick={() => remover(objeto.codigo)}>
-                                        <i className="bi bi-trash"></i>
-                                    </Button>
+                                    {usuario && usuario.tipo === 'A' &&
+                                        <Button variant="danger"
+                                            onClick={() => remover(objeto.codigo)}>
+                                            <i className="bi bi-trash"></i>
+                                        </Button>
+                                    }
                                 </td>
                                 <td>{objeto.codigo}</td>
                                 <td>{new Date(objeto.data_hora).toLocaleString('pt-BR')}</td>
