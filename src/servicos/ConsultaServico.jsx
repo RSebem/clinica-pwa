@@ -1,3 +1,4 @@
+import { getToken } from '../seguranca/Autenticacao';
 export const getConsultasAPI = async () => {
     const response = await fetch(`${process.env.REACT_APP_ENDERECO_API}/consulta`, {
         method: "GET",
