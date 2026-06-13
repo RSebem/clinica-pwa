@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Alerta from '../../comuns/Alerta';
 import CampoEntrada from '../../comuns/CampoEntrada';
 import Carregando from '../../comuns/Carregando';
+import { getToken } from '../../../seguranca/Autenticacao';
 import { getToken, getUsuario } from '../../../seguranca/Autenticacao';
 
 function MeuUsuario() {
@@ -55,7 +56,7 @@ function MeuUsuario() {
             setCarregando(false);
         }
     };
-
+// eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         recuperaUsuario();
     }, []);

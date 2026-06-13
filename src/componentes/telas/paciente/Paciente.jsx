@@ -81,7 +81,7 @@ function Paciente() {
     const handleChange = (e) => {
         setObjeto({ ...objeto, [e.target.name]: e.target.value });
     };
-
+// eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         recuperaPacientes();
     }, []);

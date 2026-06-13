@@ -9,7 +9,7 @@ export const getToken = () => {
     let decoded = jwtDecode(autenticacao.token);
     if (decoded.exp <= Math.floor(new Date() / 1000)) {
         logout();
-        throw 'Token expirado';
+        throw new Error('Token expirado');
     }
     return autenticacao.token;
 };
@@ -21,7 +21,7 @@ export const getUsuario = () => {
     let decoded = jwtDecode(autenticacao.token);
     if (decoded.exp <= Math.floor(new Date() / 1000)) {
         logout();
-        throw 'Token expirado';
+        throw new Error('Token expirado');
     }
     return decoded.usuario;
 };

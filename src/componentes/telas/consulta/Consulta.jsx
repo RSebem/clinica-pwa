@@ -90,16 +90,16 @@ function Consulta() {
         setObjeto({ ...objeto, [e.target.name]: e.target.value });
     };
 
-    useEffect(() => {
-        recuperaConsultas();
-        getDentistasAPI().then(data => {
-            setListaDentistas(Array.isArray(data) ? data : []);
-        }).catch(() => navigate("/login", { replace: true }));
-        getPacientesAPI().then(data => {
-            setListaPacientes(Array.isArray(data) ? data : []);
-        }).catch(() => navigate("/login", { replace: true }));
-    }, []);
-
+// eslint-disable-next-line react-hooks/exhaustive-deps
+useEffect(() => {
+    recuperaConsultas();
+    getDentistasAPI().then(data => {
+        setListaDentistas(Array.isArray(data) ? data : []);
+    }).catch(() => navigate("/login", { replace: true }));
+    getPacientesAPI().then(data => {
+        setListaPacientes(Array.isArray(data) ? data : []);
+    }).catch(() => navigate("/login", { replace: true }));
+}, []);
     return (
         <ConsultaContext.Provider value={{
             alerta, setAlerta, listaObjetos, objeto,
