@@ -4,7 +4,6 @@ import Alerta from '../../comuns/Alerta';
 import CampoEntrada from '../../comuns/CampoEntrada';
 import Carregando from '../../comuns/Carregando';
 import { getToken } from '../../../seguranca/Autenticacao';
-import { getToken, getUsuario } from '../../../seguranca/Autenticacao';
 
 function MeuUsuario() {
     const navigate = useNavigate();
